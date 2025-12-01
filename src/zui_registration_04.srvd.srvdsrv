@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service Definition Registration'
+define service ZUI_REGISTRATION_04 {
+  expose ZC_Registration as Registration;
+}

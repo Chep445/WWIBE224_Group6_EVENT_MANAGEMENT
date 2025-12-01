@@ -1,0 +1,43 @@
+managed implementation in class zbp_ice_registration unique;
+strict ( 2 );
+
+define behavior for ZICE_Registration alias Registration
+persistent table zce_registration
+lock master
+authorization master ( instance )
+etag master LocalLastChangedAt
+{
+  create;
+  update;
+
+  field ( numbering : managed, readonly ) RegistrationUuid;
+  field ( readonly ) RegistrationId, Status;
+  field ( readonly ) CreatedBy, CreatedAt, LastChangedBy, LastChangedAt;
+
+  // WICHTIG: (features : instance) sorgt dafür, dass wir Buttons ausgrauen können
+  action ( features : instance ) approveRegistration result [1] $self;
+  action ( features : instance ) rejectRegistration result [1] $self;
+
+  // WICHTIG: determination sorgt für Status='New' beim Anlegen
+  determination determineInitValues on modify { create; }
+
+  side effects {
+    action approveRegistration affects field Status;
+    action rejectRegistration affects field Status;
+  }
+
+  mapping for zce_registration
+  {
+    RegistrationUuid = registration_uuid;
+    RegistrationId   = registration_id;
+    EventUuid        = event_uuid;
+    ParticipantUuid  = participant_uuid;
+    Status           = status;
+    Remarks          = remarks;
+    CreatedBy        = created_by;
+    CreatedAt        = created_at;
+    LastChangedBy    = last_changed_by;
+    LastChangedAt    = last_changed_at;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}

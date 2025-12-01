@@ -1,0 +1,5 @@
+CLASS zbp_ice_registration DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zice_registration.
+ENDCLASS.
+
+CLASS zbp_ice_registration IMPLEMENTATION.
+ENDCLASS.

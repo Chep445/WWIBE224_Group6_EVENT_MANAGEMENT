@@ -1,0 +1,11 @@
+projection;
+strict ( 2 );
+
+define behavior for ZC_Registration alias Registration
+{
+  use update;
+
+  // HIERMIT SCHALTEN WIR DIE BUTTONS FREI:
+  use action approveRegistration;
+  use action rejectRegistration;
+}
