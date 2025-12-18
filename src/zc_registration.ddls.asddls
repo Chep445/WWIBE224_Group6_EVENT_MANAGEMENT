@@ -2,7 +2,7 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @UI: { headerInfo: { typeName: 'Teilnahme', typeNamePlural: 'Teilnahmen', title: { type: #STANDARD, value: 'RegistrationId' } } }
 
-define root view entity ZC_Registration
+define  view entity ZC_Registration
   provider contract transactional_query
   as projection on ZICE_Registration
 {

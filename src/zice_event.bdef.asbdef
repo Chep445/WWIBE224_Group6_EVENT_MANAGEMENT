@@ -1,7 +1,7 @@
 managed implementation in class zbp_i_event unique;
 strict ( 2 );
 
-/* --- BLOCK 1: EVENT (Eltern) --- */
+/* --- TEIL 1: EVENT (ELTERN) --- */
 define behavior for ZICE_Event alias Event
 persistent table zce_event
 lock master
@@ -12,27 +12,22 @@ etag master LocalLastChangedAt
   update;
   delete;
 
-  /* Damit das hier funktioniert, ist Block 2 (unten) notwendig */
   association _Registrations { create; }
 
-  /* Pflichtfelder */
-  field ( mandatory ) Title, Location, StartDate, EndDate, MaxParticipants, Description;
-
-  /* Read-only Felder */
+  /* Anforderung: Read-Only Felder [cite: 40] */
   field ( readonly, numbering : managed ) EventUuid;
   field ( readonly ) EventId, Status;
 
-  /* Actions */
-  action openEvent result [1] $self;
-  action closeEvent result [1] $self;
+  /* Anforderung: Pflichtfelder Event [cite: 39] */
+  field ( mandatory ) Title, Location, StartDate, EndDate, MaxParticipants, Description;
 
-  /* Logik */
+  action ( features : instance ) openEvent result [1] $self;
+  action ( features : instance ) closeEvent result [1] $self;
+
   determination setInitialStatus on modify { create; }
   determination calculateEventId on modify { create; }
-
   validation validateDates on save { field StartDate, EndDate; create; update; }
 
-  /* Mapping für Event (Verbindet App-Namen mit DB-Namen) */
   mapping for zce_event
   {
     EventUuid = event_uuid;
@@ -44,7 +39,6 @@ etag master LocalLastChangedAt
     MaxParticipants = max_participants;
     Status = status;
     Description = description;
-    /* Administrative Felder nicht vergessen */
     CreatedBy = created_by;
     CreatedAt = created_at;
     LastChangedBy = last_changed_by;
@@ -53,7 +47,7 @@ etag master LocalLastChangedAt
   }
 }
 
-/* --- BLOCK 2: REGISTRATION (Kind) - Das hat gefehlt --- */
+/* --- TEIL 2: REGISTRATION (KIND) --- */
 define behavior for ZICE_Registration alias Registration
 persistent table zce_registration
 lock dependent by _Event
@@ -63,22 +57,28 @@ etag master LocalLastChangedAt
   update;
   delete;
 
-  /* Verbindung zum Eltern-Element */
   field ( readonly ) EventUuid;
   association _Event;
 
-  /* UUID automatisch verwalten */
   field ( readonly, numbering : managed ) RegistrationUuid;
+  field ( readonly ) RegistrationId, Status;
 
-  /* Mapping für Registration */
-  mapping for zce_registration
-  {
-    RegistrationUuid = registration_uuid;
-    EventUuid = event_uuid;
-    RegistrationId = registration_id;
-    ParticipantUuid = participant_uuid;
-    Status = status;
-    Remarks = remarks;
-    LocalLastChangedAt = local_last_changed_at;
+  /* Anforderung: Teilnehmer muss Pflichtfeld sein [cite: 48] */
+  field ( mandatory ) ParticipantUuid;
+
+  action ( features : instance ) approveRegistration result [1] $self;
+  action ( features : instance ) rejectRegistration result [1] $self;
+
+  determination determineInitValues on modify { create; }
+  validation validateMaxParticipants on save { create; }
+
+  mapping for zce_registration {
+      RegistrationUuid = registration_uuid;
+      EventUuid = event_uuid;
+      RegistrationId = registration_id;
+      ParticipantUuid = participant_uuid;
+      Status = status;
+      Remarks = remarks;
+      LocalLastChangedAt = local_last_changed_at;
   }
 }

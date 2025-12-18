@@ -1,10 +1,9 @@
-@AbapCatalog.viewEnhancementCategory: [#PROJECTION_LIST]
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Event Interface View'
 define root view entity ZICE_Event
   as select from zce_event
+  /* Composition zu Registration (wird für App 2 benötigt) */
   composition [0..*] of ZICE_Registration as _Registrations
-  
 {
   key event_uuid            as EventUuid,
       event_id              as EventId,
@@ -16,12 +15,12 @@ define root view entity ZICE_Event
       status                as Status,
       description           as Description,
 
-      /* Berechnetes Feld für StatusText (Anforderung PDF) */
+      /* Anforderung App 1: Berechnetes Feld Status Text */
       case status
-        when 'P' then 'Planned'
-        when 'O' then 'Open'
-        when 'C' then 'Closed'
-        else 'Unknown'
+        when 'P' then 'Planned'   /* */
+        when 'O' then 'Open'      /* */
+        when 'C' then 'Closed'    /* */
+        else ''
       end                   as StatusText,
 
       /* Administrative Felder */
@@ -36,6 +35,5 @@ define root view entity ZICE_Event
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
       local_last_changed_at as LocalLastChangedAt,
 
-      /* Association */
-     _Registrations
+      _Registrations
 }
