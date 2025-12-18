@@ -1,0 +1,84 @@
+managed implementation in class zbp_i_event unique;
+strict ( 2 );
+
+/* --- BLOCK 1: EVENT (Eltern) --- */
+define behavior for ZICE_Event alias Event
+persistent table zce_event
+lock master
+authorization master ( instance )
+etag master LocalLastChangedAt
+{
+  create;
+  update;
+  delete;
+
+  /* Damit das hier funktioniert, ist Block 2 (unten) notwendig */
+  association _Registrations { create; }
+
+  /* Pflichtfelder */
+  field ( mandatory ) Title, Location, StartDate, EndDate, MaxParticipants, Description;
+
+  /* Read-only Felder */
+  field ( readonly, numbering : managed ) EventUuid;
+  field ( readonly ) EventId, Status;
+
+  /* Actions */
+  action openEvent result [1] $self;
+  action closeEvent result [1] $self;
+
+  /* Logik */
+  determination setInitialStatus on modify { create; }
+  determination calculateEventId on modify { create; }
+
+  validation validateDates on save { field StartDate, EndDate; create; update; }
+
+  /* Mapping für Event (Verbindet App-Namen mit DB-Namen) */
+  mapping for zce_event
+  {
+    EventUuid = event_uuid;
+    EventId = event_id;
+    Title = title;
+    Location = location;
+    StartDate = start_date;
+    EndDate = end_date;
+    MaxParticipants = max_participants;
+    Status = status;
+    Description = description;
+    /* Administrative Felder nicht vergessen */
+    CreatedBy = created_by;
+    CreatedAt = created_at;
+    LastChangedBy = last_changed_by;
+    LastChangedAt = last_changed_at;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}
+
+/* --- BLOCK 2: REGISTRATION (Kind) - Das hat gefehlt --- */
+define behavior for ZICE_Registration alias Registration
+persistent table zce_registration
+lock dependent by _Event
+authorization dependent by _Event
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+
+  /* Verbindung zum Eltern-Element */
+  field ( readonly ) EventUuid;
+  association _Event;
+
+  /* UUID automatisch verwalten */
+  field ( readonly, numbering : managed ) RegistrationUuid;
+
+  /* Mapping für Registration */
+  mapping for zce_registration
+  {
+    RegistrationUuid = registration_uuid;
+    EventUuid = event_uuid;
+    RegistrationId = registration_id;
+    ParticipantUuid = participant_uuid;
+    Status = status;
+    Remarks = remarks;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}

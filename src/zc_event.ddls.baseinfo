@@ -3,12 +3,10 @@
 {
 "FROM":
 [
-"ZCE_EVENT"
+"ZICE_EVENT"
 ],
 "ASSOCIATED":
-[
-"ZICE_REGISTRATION"
-],
+[],
 "BASE":
 [],
 "ANNO_REF":
