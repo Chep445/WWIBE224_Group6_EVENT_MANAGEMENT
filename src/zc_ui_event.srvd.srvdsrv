@@ -1,0 +1,5 @@
+@EndUserText.label: 'Service Definition Event'
+define service ZC_UI_EVENT {
+  expose ZC_EVENT;
+  expose ZR_PARTICIPANT;
+}

@@ -1,0 +1,80 @@
+@Metadata.layer: #CUSTOMER
+@UI.headerInfo: {
+  typeName: 'Registration',
+  typeNamePlural: 'Registrations',
+  title.value: 'RegistrationId',
+  description.value: 'Status'
+}
+annotate entity ZC_REGISTRATION with
+{
+  @UI.facet: [
+    { position: 10, targetQualifier: 'RegistrationData', label: 'Registration Details', type: #FIELDGROUP_REFERENCE },
+    { position: 20, targetQualifier: 'ParticipantData',   label: 'Participant',          type: #FIELDGROUP_REFERENCE },
+    { position: 30, targetQualifier: 'AdminData',         label: 'Admin Data',           type: #FIELDGROUP_REFERENCE }
+  ]
+
+
+  @UI.lineItem:
+    [
+        { position: 10, dataAction: 'ApproveRegistration', label: 'Approve', type: #FOR_ACTION },
+        { position: 20, dataAction: 'RejectRegistration', label: 'Decline', type: #FOR_ACTION}
+    ]
+    
+    RegistrationUuid;
+    
+  @UI.selectionField: [{ position: 10 }]
+  @UI.lineItem:       [{ position: 10, label: 'Registration ID' }]
+  @UI.fieldGroup:     [{ position: 10, qualifier: 'RegistrationData', label: 'Registration ID' }]
+  RegistrationId;
+
+  @UI.selectionField: [{ position: 20 }]
+  @UI.lineItem:       [{ position: 20, label: 'Status' }]
+  @UI.fieldGroup:     [{ position: 20, qualifier: 'RegistrationData', label: 'Status' }]
+  Status;
+
+  @UI.selectionField: [{ position: 30 }]
+  @UI.lineItem:       [{ position: 30, label: 'Remarks' }]
+  @UI.fieldGroup:     [{ position: 30, qualifier: 'RegistrationData', label: 'Remarks' }]
+  Remarks;
+
+  @UI.selectionField: [{ position: 40 }]
+  @UI.fieldGroup:     [{ position: 40, qualifier: 'ParticipantData', label: 'Participant' }]
+  ParticipantUuid;
+
+  @UI.lineItem:   [{ position: 40, label: 'Participant ID' }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'ParticipantData', label: 'Participant ID' }]
+  ParticipantId;
+
+  @UI.lineItem:   [{ position: 50, label: 'Last Name' }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'ParticipantData', label: 'Last Name' }]
+  ParticipantLastName;
+
+  @UI.lineItem:   [{ position: 60, label: 'First Name' }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'ParticipantData', label: 'First Name' }]
+  ParticipantFirstName;
+
+  @UI.lineItem:   [{ position: 70, label: 'Email' }]
+  @UI.fieldGroup: [{ position: 40, qualifier: 'ParticipantData', label: 'Email' }]
+  ParticipantEmail;
+
+  @UI.fieldGroup: [{ position: 50, qualifier: 'ParticipantData', label: 'Phone' }]
+  ParticipantPhone;
+
+  @UI.fieldGroup: [{ position: 70, qualifier: 'RegistrationData', label: 'Event UUID' }]
+  EventUuid;
+
+  @UI.fieldGroup: [{ position: 10, qualifier: 'AdminData', label: 'Created By' }]
+  CreatedBy;
+
+  @UI.fieldGroup: [{ position: 20, qualifier: 'AdminData', label: 'Created At' }]
+  CreatedAt;
+
+  @UI.fieldGroup: [{ position: 30, qualifier: 'AdminData', label: 'Last Changed By' }]
+  LastChangedBy;
+
+  @UI.fieldGroup: [{ position: 40, qualifier: 'AdminData', label: 'Last Changed At' }]
+  LastChangedAt;
+
+  @UI.fieldGroup: [{ position: 50, qualifier: 'AdminData', label: 'Local Last Changed At' }]
+  LocalLastChangedAt;
+}

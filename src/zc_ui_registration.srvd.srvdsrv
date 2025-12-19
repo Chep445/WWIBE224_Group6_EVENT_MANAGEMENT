@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service Definition'
+define service ZC_UI_REGISTRATION {
+  expose ZC_REGISTRATION;
+}

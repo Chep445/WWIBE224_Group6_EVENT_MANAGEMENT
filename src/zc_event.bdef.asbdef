@@ -1,0 +1,22 @@
+projection;
+strict ( 2 );
+
+define behavior for ZC_EVENT //alias <alias_name>
+{
+  use create;
+  use update;
+  use delete;
+
+  use action openEvent;
+  use action closeEvent;
+  use association _Registrations;
+}
+
+define behavior for ZC_REGISTRATION
+{
+    use association _Event;
+    use action ApproveRegistration;
+    use action RejectRegistration;
+
+
+}
